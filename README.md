@@ -1,5 +1,6 @@
 # Projet Infra Automatisée
 
+  /!\ Ce projet est un projet perso, il n'est ni fini, ni fonctionnel.
   Ce projet est un deploiement automatisé d'une architecture sécurisée avec Terraform, provisionnée par Ansible"
 
 ---
