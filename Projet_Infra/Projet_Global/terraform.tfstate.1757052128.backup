@@ -1,0 +1,1269 @@
+{
+  "version": 4,
+  "terraform_version": "1.13.0",
+  "serial": 541,
+  "lineage": "289a82e4-add6-7bce-6069-73d9539b6e4f",
+  "outputs": {},
+  "resources": [
+    {
+      "module": "module.RZO.module.GRPs.module.portgroup_DSI_clients",
+      "mode": "managed",
+      "type": "esxi_portgroup",
+      "name": "DSI_clients",
+      "provider": "provider[\"registry.terraform.io/josenk/esxi\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "forged_transmits": null,
+            "id": "DSI_clients",
+            "mac_changes": null,
+            "name": "DSI_clients",
+            "promiscuous_mode": null,
+            "vlan": 0,
+            "vswitch": "DSI_clients"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "module.RZO.module.Vswitchs.module.vSwitch100.esxi_vswitch.vswitch_fr_fr",
+            "module.RZO.module.Vswitchs.module.vSwitch130.esxi_vswitch.vswitch_DSI_serveurs",
+            "module.RZO.module.Vswitchs.module.vSwitch131.esxi_vswitch.vswitch_DSI_clients",
+            "module.RZO.module.Vswitchs.module.vSwitch30.esxi_vswitch.vswitch_prod_serveurs",
+            "module.RZO.module.Vswitchs.module.vSwitch31.esxi_vswitch.vswitch_prod_clients",
+            "module.RZO.module.Vswitchs.module.vSwitch80.esxi_vswitch.vswitch_DMZ_fw"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.RZO.module.GRPs.module.portgroup_DSI_serveurs",
+      "mode": "managed",
+      "type": "esxi_portgroup",
+      "name": "DSI_serveurs",
+      "provider": "provider[\"registry.terraform.io/josenk/esxi\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "forged_transmits": null,
+            "id": "DSI_serveurs",
+            "mac_changes": null,
+            "name": "DSI_serveurs",
+            "promiscuous_mode": null,
+            "vlan": 0,
+            "vswitch": "DSI_serveurs"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "module.RZO.module.Vswitchs.module.vSwitch100.esxi_vswitch.vswitch_fr_fr",
+            "module.RZO.module.Vswitchs.module.vSwitch130.esxi_vswitch.vswitch_DSI_serveurs",
+            "module.RZO.module.Vswitchs.module.vSwitch131.esxi_vswitch.vswitch_DSI_clients",
+            "module.RZO.module.Vswitchs.module.vSwitch30.esxi_vswitch.vswitch_prod_serveurs",
+            "module.RZO.module.Vswitchs.module.vSwitch31.esxi_vswitch.vswitch_prod_clients",
+            "module.RZO.module.Vswitchs.module.vSwitch80.esxi_vswitch.vswitch_DMZ_fw"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.RZO.module.GRPs.module.portgroup_dmz",
+      "mode": "managed",
+      "type": "esxi_portgroup",
+      "name": "grp_DMZ_fw",
+      "provider": "provider[\"registry.terraform.io/josenk/esxi\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "forged_transmits": null,
+            "id": "GRP-DMZ-FW",
+            "mac_changes": null,
+            "name": "GRP-DMZ-FW",
+            "promiscuous_mode": null,
+            "vlan": 0,
+            "vswitch": "vSW-DMZ-FW"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "module.RZO.module.Vswitchs.module.vSwitch100.esxi_vswitch.vswitch_fr_fr",
+            "module.RZO.module.Vswitchs.module.vSwitch130.esxi_vswitch.vswitch_DSI_serveurs",
+            "module.RZO.module.Vswitchs.module.vSwitch131.esxi_vswitch.vswitch_DSI_clients",
+            "module.RZO.module.Vswitchs.module.vSwitch30.esxi_vswitch.vswitch_prod_serveurs",
+            "module.RZO.module.Vswitchs.module.vSwitch31.esxi_vswitch.vswitch_prod_clients",
+            "module.RZO.module.Vswitchs.module.vSwitch80.esxi_vswitch.vswitch_DMZ_fw"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.RZO.module.GRPs.module.portgroup_fws",
+      "mode": "managed",
+      "type": "esxi_portgroup",
+      "name": "FWs",
+      "provider": "provider[\"registry.terraform.io/josenk/esxi\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "forged_transmits": null,
+            "id": "GRP-FW-FW",
+            "mac_changes": null,
+            "name": "GRP-FW-FW",
+            "promiscuous_mode": null,
+            "vlan": 0,
+            "vswitch": "vSW-FW-FW"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "module.RZO.module.Vswitchs.module.vSwitch100.esxi_vswitch.vswitch_fr_fr",
+            "module.RZO.module.Vswitchs.module.vSwitch130.esxi_vswitch.vswitch_DSI_serveurs",
+            "module.RZO.module.Vswitchs.module.vSwitch131.esxi_vswitch.vswitch_DSI_clients",
+            "module.RZO.module.Vswitchs.module.vSwitch30.esxi_vswitch.vswitch_prod_serveurs",
+            "module.RZO.module.Vswitchs.module.vSwitch31.esxi_vswitch.vswitch_prod_clients",
+            "module.RZO.module.Vswitchs.module.vSwitch80.esxi_vswitch.vswitch_DMZ_fw"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.RZO.module.GRPs.module.portgroup_prod_clients",
+      "mode": "managed",
+      "type": "esxi_portgroup",
+      "name": "prod_clients",
+      "provider": "provider[\"registry.terraform.io/josenk/esxi\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "forged_transmits": null,
+            "id": "prod_clients",
+            "mac_changes": null,
+            "name": "prod_clients",
+            "promiscuous_mode": null,
+            "vlan": 0,
+            "vswitch": "Prod_clients"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "module.RZO.module.Vswitchs.module.vSwitch100.esxi_vswitch.vswitch_fr_fr",
+            "module.RZO.module.Vswitchs.module.vSwitch130.esxi_vswitch.vswitch_DSI_serveurs",
+            "module.RZO.module.Vswitchs.module.vSwitch131.esxi_vswitch.vswitch_DSI_clients",
+            "module.RZO.module.Vswitchs.module.vSwitch30.esxi_vswitch.vswitch_prod_serveurs",
+            "module.RZO.module.Vswitchs.module.vSwitch31.esxi_vswitch.vswitch_prod_clients",
+            "module.RZO.module.Vswitchs.module.vSwitch80.esxi_vswitch.vswitch_DMZ_fw"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.RZO.module.GRPs.module.portgroup_prod_serveurs",
+      "mode": "managed",
+      "type": "esxi_portgroup",
+      "name": "prod_serveurs",
+      "provider": "provider[\"registry.terraform.io/josenk/esxi\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "forged_transmits": null,
+            "id": "prod_serveurs",
+            "mac_changes": null,
+            "name": "prod_serveurs",
+            "promiscuous_mode": null,
+            "vlan": 0,
+            "vswitch": "Prod_serveurs"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "module.RZO.module.Vswitchs.module.vSwitch100.esxi_vswitch.vswitch_fr_fr",
+            "module.RZO.module.Vswitchs.module.vSwitch130.esxi_vswitch.vswitch_DSI_serveurs",
+            "module.RZO.module.Vswitchs.module.vSwitch131.esxi_vswitch.vswitch_DSI_clients",
+            "module.RZO.module.Vswitchs.module.vSwitch30.esxi_vswitch.vswitch_prod_serveurs",
+            "module.RZO.module.Vswitchs.module.vSwitch31.esxi_vswitch.vswitch_prod_clients",
+            "module.RZO.module.Vswitchs.module.vSwitch80.esxi_vswitch.vswitch_DMZ_fw"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.RZO.module.Vswitchs.module.vSwitch100",
+      "mode": "managed",
+      "type": "esxi_vswitch",
+      "name": "vswitch_fr_fr",
+      "provider": "provider[\"registry.terraform.io/josenk/esxi\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "forged_transmits": false,
+            "id": "vSW-FW-FW",
+            "link_discovery_mode": "listen",
+            "mac_changes": false,
+            "mtu": 1500,
+            "name": "vSW-FW-FW",
+            "ports": 128,
+            "promiscuous_mode": false,
+            "uplink": []
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA=="
+        }
+      ]
+    },
+    {
+      "module": "module.RZO.module.Vswitchs.module.vSwitch130",
+      "mode": "managed",
+      "type": "esxi_vswitch",
+      "name": "vswitch_DSI_serveurs",
+      "provider": "provider[\"registry.terraform.io/josenk/esxi\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "forged_transmits": false,
+            "id": "DSI_serveurs",
+            "link_discovery_mode": "listen",
+            "mac_changes": false,
+            "mtu": 1500,
+            "name": "DSI_serveurs",
+            "ports": 128,
+            "promiscuous_mode": false,
+            "uplink": []
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA=="
+        }
+      ]
+    },
+    {
+      "module": "module.RZO.module.Vswitchs.module.vSwitch131",
+      "mode": "managed",
+      "type": "esxi_vswitch",
+      "name": "vswitch_DSI_clients",
+      "provider": "provider[\"registry.terraform.io/josenk/esxi\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "forged_transmits": false,
+            "id": "DSI_clients",
+            "link_discovery_mode": "listen",
+            "mac_changes": false,
+            "mtu": 1500,
+            "name": "DSI_clients",
+            "ports": 128,
+            "promiscuous_mode": false,
+            "uplink": []
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA=="
+        }
+      ]
+    },
+    {
+      "module": "module.RZO.module.Vswitchs.module.vSwitch30",
+      "mode": "managed",
+      "type": "esxi_vswitch",
+      "name": "vswitch_prod_serveurs",
+      "provider": "provider[\"registry.terraform.io/josenk/esxi\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "forged_transmits": false,
+            "id": "Prod_serveurs",
+            "link_discovery_mode": "listen",
+            "mac_changes": false,
+            "mtu": 1500,
+            "name": "Prod_serveurs",
+            "ports": 128,
+            "promiscuous_mode": false,
+            "uplink": []
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA=="
+        }
+      ]
+    },
+    {
+      "module": "module.RZO.module.Vswitchs.module.vSwitch31",
+      "mode": "managed",
+      "type": "esxi_vswitch",
+      "name": "vswitch_prod_clients",
+      "provider": "provider[\"registry.terraform.io/josenk/esxi\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "forged_transmits": false,
+            "id": "Prod_clients",
+            "link_discovery_mode": "listen",
+            "mac_changes": false,
+            "mtu": 1500,
+            "name": "Prod_clients",
+            "ports": 128,
+            "promiscuous_mode": false,
+            "uplink": []
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA=="
+        }
+      ]
+    },
+    {
+      "module": "module.RZO.module.Vswitchs.module.vSwitch80",
+      "mode": "managed",
+      "type": "esxi_vswitch",
+      "name": "vswitch_DMZ_fw",
+      "provider": "provider[\"registry.terraform.io/josenk/esxi\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "forged_transmits": false,
+            "id": "vSW-DMZ-FW",
+            "link_discovery_mode": "listen",
+            "mac_changes": false,
+            "mtu": 1500,
+            "name": "vSW-DMZ-FW",
+            "ports": 128,
+            "promiscuous_mode": false,
+            "uplink": []
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA=="
+        }
+      ]
+    },
+    {
+      "module": "module.Vms.module.clientlinux1",
+      "mode": "managed",
+      "type": "esxi_guest",
+      "name": "client_1_linux",
+      "provider": "provider[\"registry.terraform.io/josenk/esxi\"]",
+      "instances": [
+        {
+          "status": "tainted",
+          "schema_version": 0,
+          "attributes": {
+            "boot_disk_size": null,
+            "boot_disk_type": "thin",
+            "boot_firmware": "efi",
+            "clone_from_vm": null,
+            "disk_store": "ESX-DSS-GESTION-local-storage2",
+            "guest_name": "client_1_linux",
+            "guest_shutdown_timeout": 20,
+            "guest_startup_timeout": 120,
+            "guestinfo": null,
+            "guestos": null,
+            "host_ovf": null,
+            "id": "291",
+            "ip_address": null,
+            "memsize": "4096",
+            "network_interfaces": [
+              {
+                "mac_address": "",
+                "nic_type": "e1000",
+                "virtual_network": "GRP-RTR-FW"
+              },
+              {
+                "mac_address": "",
+                "nic_type": "e1000",
+                "virtual_network": "DSI_clients"
+              }
+            ],
+            "notes": null,
+            "numvcpus": "1",
+            "ovf_properties": [],
+            "ovf_properties_timer": 90,
+            "ovf_source": "/media/disk2/OVA/Ubuntu22.04.ova",
+            "power": "on",
+            "resource_pool_name": "/",
+            "virthwver": null,
+            "virtual_disks": []
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "module.RZO.module.GRPs.module.portgroup_DSI_clients.esxi_portgroup.DSI_clients",
+            "module.RZO.module.GRPs.module.portgroup_DSI_serveurs.esxi_portgroup.DSI_serveurs",
+            "module.RZO.module.GRPs.module.portgroup_dmz.esxi_portgroup.grp_DMZ_fw",
+            "module.RZO.module.GRPs.module.portgroup_fws.esxi_portgroup.FWs",
+            "module.RZO.module.GRPs.module.portgroup_prod_clients.esxi_portgroup.prod_clients",
+            "module.RZO.module.GRPs.module.portgroup_prod_serveurs.esxi_portgroup.prod_serveurs",
+            "module.RZO.module.Vswitchs.module.vSwitch100.esxi_vswitch.vswitch_fr_fr",
+            "module.RZO.module.Vswitchs.module.vSwitch130.esxi_vswitch.vswitch_DSI_serveurs",
+            "module.RZO.module.Vswitchs.module.vSwitch131.esxi_vswitch.vswitch_DSI_clients",
+            "module.RZO.module.Vswitchs.module.vSwitch30.esxi_vswitch.vswitch_prod_serveurs",
+            "module.RZO.module.Vswitchs.module.vSwitch31.esxi_vswitch.vswitch_prod_clients",
+            "module.RZO.module.Vswitchs.module.vSwitch80.esxi_vswitch.vswitch_DMZ_fw"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.Vms.module.clientlinux2",
+      "mode": "managed",
+      "type": "esxi_guest",
+      "name": "client_2_linux",
+      "provider": "provider[\"registry.terraform.io/josenk/esxi\"]",
+      "instances": [
+        {
+          "status": "tainted",
+          "schema_version": 0,
+          "attributes": {
+            "boot_disk_size": null,
+            "boot_disk_type": "thin",
+            "boot_firmware": "efi",
+            "clone_from_vm": null,
+            "disk_store": "ESX-DSS-GESTION-local-storage2",
+            "guest_name": "client_2_linux",
+            "guest_shutdown_timeout": 20,
+            "guest_startup_timeout": 120,
+            "guestinfo": null,
+            "guestos": "ubuntu-64",
+            "host_ovf": null,
+            "id": "284",
+            "ip_address": "10.0.0.146",
+            "memsize": "4096",
+            "network_interfaces": [
+              {
+                "mac_address": "",
+                "nic_type": "e1000",
+                "virtual_network": "GRP-RTR-FW"
+              },
+              {
+                "mac_address": "",
+                "nic_type": "e1000",
+                "virtual_network": "DSI_clients"
+              }
+            ],
+            "notes": "",
+            "numvcpus": "1",
+            "ovf_properties": [],
+            "ovf_properties_timer": 90,
+            "ovf_source": "/media/disk2/OVA/Ubuntu22.04.ova",
+            "power": "on",
+            "resource_pool_name": "/",
+            "virthwver": "21",
+            "virtual_disks": []
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "module.RZO.module.GRPs.module.portgroup_DSI_clients.esxi_portgroup.DSI_clients",
+            "module.RZO.module.GRPs.module.portgroup_DSI_serveurs.esxi_portgroup.DSI_serveurs",
+            "module.RZO.module.GRPs.module.portgroup_dmz.esxi_portgroup.grp_DMZ_fw",
+            "module.RZO.module.GRPs.module.portgroup_fws.esxi_portgroup.FWs",
+            "module.RZO.module.GRPs.module.portgroup_prod_clients.esxi_portgroup.prod_clients",
+            "module.RZO.module.GRPs.module.portgroup_prod_serveurs.esxi_portgroup.prod_serveurs",
+            "module.RZO.module.Vswitchs.module.vSwitch100.esxi_vswitch.vswitch_fr_fr",
+            "module.RZO.module.Vswitchs.module.vSwitch130.esxi_vswitch.vswitch_DSI_serveurs",
+            "module.RZO.module.Vswitchs.module.vSwitch131.esxi_vswitch.vswitch_DSI_clients",
+            "module.RZO.module.Vswitchs.module.vSwitch30.esxi_vswitch.vswitch_prod_serveurs",
+            "module.RZO.module.Vswitchs.module.vSwitch31.esxi_vswitch.vswitch_prod_clients",
+            "module.RZO.module.Vswitchs.module.vSwitch80.esxi_vswitch.vswitch_DMZ_fw"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.Vms.module.clientlinux3",
+      "mode": "managed",
+      "type": "esxi_guest",
+      "name": "client_3_linux",
+      "provider": "provider[\"registry.terraform.io/josenk/esxi\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "boot_disk_size": null,
+            "boot_disk_type": "thin",
+            "boot_firmware": "efi",
+            "clone_from_vm": null,
+            "disk_store": "ESX-DSS-GESTION-local-storage2",
+            "guest_name": "client_3_linux",
+            "guest_shutdown_timeout": 20,
+            "guest_startup_timeout": 120,
+            "guestinfo": null,
+            "guestos": "ubuntu-64",
+            "host_ovf": null,
+            "id": "222",
+            "ip_address": "10.0.0.156",
+            "memsize": "4096",
+            "network_interfaces": [
+              {
+                "mac_address": "",
+                "nic_type": "e1000",
+                "virtual_network": "GRP-RTR-FW"
+              },
+              {
+                "mac_address": "",
+                "nic_type": "e1000",
+                "virtual_network": "DSI_clients"
+              }
+            ],
+            "notes": "",
+            "numvcpus": "1",
+            "ovf_properties": [],
+            "ovf_properties_timer": 90,
+            "ovf_source": "/media/disk2/OVA/Ubuntu22.04.ova",
+            "power": "on",
+            "resource_pool_name": "/",
+            "virthwver": "21",
+            "virtual_disks": []
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "module.RZO.module.GRPs.module.portgroup_DSI_clients.esxi_portgroup.DSI_clients",
+            "module.RZO.module.GRPs.module.portgroup_DSI_serveurs.esxi_portgroup.DSI_serveurs",
+            "module.RZO.module.GRPs.module.portgroup_dmz.esxi_portgroup.grp_DMZ_fw",
+            "module.RZO.module.GRPs.module.portgroup_fws.esxi_portgroup.FWs",
+            "module.RZO.module.GRPs.module.portgroup_prod_clients.esxi_portgroup.prod_clients",
+            "module.RZO.module.GRPs.module.portgroup_prod_serveurs.esxi_portgroup.prod_serveurs",
+            "module.RZO.module.Vswitchs.module.vSwitch100.esxi_vswitch.vswitch_fr_fr",
+            "module.RZO.module.Vswitchs.module.vSwitch130.esxi_vswitch.vswitch_DSI_serveurs",
+            "module.RZO.module.Vswitchs.module.vSwitch131.esxi_vswitch.vswitch_DSI_clients",
+            "module.RZO.module.Vswitchs.module.vSwitch30.esxi_vswitch.vswitch_prod_serveurs",
+            "module.RZO.module.Vswitchs.module.vSwitch31.esxi_vswitch.vswitch_prod_clients",
+            "module.RZO.module.Vswitchs.module.vSwitch80.esxi_vswitch.vswitch_DMZ_fw",
+            "module.Vms.module.clientlinux2.esxi_guest.client_2_linux"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.Vms.module.clientwin1",
+      "mode": "managed",
+      "type": "esxi_guest",
+      "name": "Client_Win1",
+      "provider": "provider[\"registry.terraform.io/josenk/esxi\"]",
+      "instances": [
+        {
+          "status": "tainted",
+          "schema_version": 0,
+          "attributes": {
+            "boot_disk_size": null,
+            "boot_disk_type": "thin",
+            "boot_firmware": "bios",
+            "clone_from_vm": null,
+            "disk_store": "ESX-DSS-GESTION-local-storage2",
+            "guest_name": "Client_Win1",
+            "guest_shutdown_timeout": 20,
+            "guest_startup_timeout": 120,
+            "guestinfo": null,
+            "guestos": "windows11-64",
+            "host_ovf": null,
+            "id": "283",
+            "ip_address": "10.0.0.121",
+            "memsize": "4096",
+            "network_interfaces": [
+              {
+                "mac_address": "",
+                "nic_type": "e1000",
+                "virtual_network": "GRP-RTR-FW"
+              },
+              {
+                "mac_address": "",
+                "nic_type": "e1000",
+                "virtual_network": "prod_clients"
+              }
+            ],
+            "notes": "",
+            "numvcpus": "2",
+            "ovf_properties": [],
+            "ovf_properties_timer": 90,
+            "ovf_source": "/media/disk2/OVA/Client_Win.ova",
+            "power": "on",
+            "resource_pool_name": "/",
+            "virthwver": "21",
+            "virtual_disks": []
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "module.RZO.module.GRPs.module.portgroup_DSI_clients.esxi_portgroup.DSI_clients",
+            "module.RZO.module.GRPs.module.portgroup_DSI_serveurs.esxi_portgroup.DSI_serveurs",
+            "module.RZO.module.GRPs.module.portgroup_dmz.esxi_portgroup.grp_DMZ_fw",
+            "module.RZO.module.GRPs.module.portgroup_fws.esxi_portgroup.FWs",
+            "module.RZO.module.GRPs.module.portgroup_prod_clients.esxi_portgroup.prod_clients",
+            "module.RZO.module.GRPs.module.portgroup_prod_serveurs.esxi_portgroup.prod_serveurs",
+            "module.RZO.module.Vswitchs.module.vSwitch100.esxi_vswitch.vswitch_fr_fr",
+            "module.RZO.module.Vswitchs.module.vSwitch130.esxi_vswitch.vswitch_DSI_serveurs",
+            "module.RZO.module.Vswitchs.module.vSwitch131.esxi_vswitch.vswitch_DSI_clients",
+            "module.RZO.module.Vswitchs.module.vSwitch30.esxi_vswitch.vswitch_prod_serveurs",
+            "module.RZO.module.Vswitchs.module.vSwitch31.esxi_vswitch.vswitch_prod_clients",
+            "module.RZO.module.Vswitchs.module.vSwitch80.esxi_vswitch.vswitch_DMZ_fw"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.Vms.module.clientwin2",
+      "mode": "managed",
+      "type": "esxi_guest",
+      "name": "Client_Win2",
+      "provider": "provider[\"registry.terraform.io/josenk/esxi\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "boot_disk_size": null,
+            "boot_disk_type": "thin",
+            "boot_firmware": "bios",
+            "clone_from_vm": null,
+            "disk_store": "ESX-DSS-GESTION-local-storage2",
+            "guest_name": "Client_Win2",
+            "guest_shutdown_timeout": 20,
+            "guest_startup_timeout": 120,
+            "guestinfo": null,
+            "guestos": "windows11-64",
+            "host_ovf": null,
+            "id": "212",
+            "ip_address": "",
+            "memsize": "4096",
+            "network_interfaces": [
+              {
+                "mac_address": "",
+                "nic_type": "e1000",
+                "virtual_network": "GRP-RTR-FW"
+              },
+              {
+                "mac_address": "",
+                "nic_type": "e1000",
+                "virtual_network": "prod_clients"
+              }
+            ],
+            "notes": "",
+            "numvcpus": "2",
+            "ovf_properties": [],
+            "ovf_properties_timer": 90,
+            "ovf_source": "/media/disk2/OVA/Client_Win.ova",
+            "power": "on",
+            "resource_pool_name": "/",
+            "virthwver": "21",
+            "virtual_disks": []
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "module.RZO.module.GRPs.module.portgroup_DSI_clients.esxi_portgroup.DSI_clients",
+            "module.RZO.module.GRPs.module.portgroup_DSI_serveurs.esxi_portgroup.DSI_serveurs",
+            "module.RZO.module.GRPs.module.portgroup_dmz.esxi_portgroup.grp_DMZ_fw",
+            "module.RZO.module.GRPs.module.portgroup_fws.esxi_portgroup.FWs",
+            "module.RZO.module.GRPs.module.portgroup_prod_clients.esxi_portgroup.prod_clients",
+            "module.RZO.module.GRPs.module.portgroup_prod_serveurs.esxi_portgroup.prod_serveurs",
+            "module.RZO.module.Vswitchs.module.vSwitch100.esxi_vswitch.vswitch_fr_fr",
+            "module.RZO.module.Vswitchs.module.vSwitch130.esxi_vswitch.vswitch_DSI_serveurs",
+            "module.RZO.module.Vswitchs.module.vSwitch131.esxi_vswitch.vswitch_DSI_clients",
+            "module.RZO.module.Vswitchs.module.vSwitch30.esxi_vswitch.vswitch_prod_serveurs",
+            "module.RZO.module.Vswitchs.module.vSwitch31.esxi_vswitch.vswitch_prod_clients",
+            "module.RZO.module.Vswitchs.module.vSwitch80.esxi_vswitch.vswitch_DMZ_fw",
+            "module.Vms.module.clientlinux1.esxi_guest.client_1_linux",
+            "module.Vms.module.clientlinux2.esxi_guest.client_2_linux",
+            "module.Vms.module.clientlinux3.esxi_guest.client_3_linux",
+            "module.Vms.module.clientwin1.esxi_guest.Client_Win1",
+            "module.Vms.module.dmz.esxi_guest.DMZ_WEB_SFTP",
+            "module.Vms.module.opnsense.esxi_guest.OpnSense",
+            "module.Vms.module.pfsense.esxi_guest.PFSense",
+            "module.Vms.module.prodlinux.esxi_guest.serv_prod_linux",
+            "module.Vms.module.prodwin.esxi_guest.serv_prod_win"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.Vms.module.clientwin3",
+      "mode": "managed",
+      "type": "esxi_guest",
+      "name": "client_3_win",
+      "provider": "provider[\"registry.terraform.io/josenk/esxi\"]",
+      "instances": [
+        {
+          "status": "tainted",
+          "schema_version": 0,
+          "attributes": {
+            "boot_disk_size": null,
+            "boot_disk_type": "thin",
+            "boot_firmware": "bios",
+            "clone_from_vm": null,
+            "disk_store": "ESX-DSS-GESTION-local-storage2",
+            "guest_name": "Client_Win3",
+            "guest_shutdown_timeout": 20,
+            "guest_startup_timeout": 120,
+            "guestinfo": null,
+            "guestos": "windows11-64",
+            "host_ovf": null,
+            "id": "230",
+            "ip_address": "10.0.0.123",
+            "memsize": "4096",
+            "network_interfaces": [
+              {
+                "mac_address": "",
+                "nic_type": "e1000",
+                "virtual_network": "GRP-RTR-FW"
+              },
+              {
+                "mac_address": "",
+                "nic_type": "e1000",
+                "virtual_network": "prod_clients"
+              }
+            ],
+            "notes": "",
+            "numvcpus": "2",
+            "ovf_properties": [],
+            "ovf_properties_timer": 90,
+            "ovf_source": "/media/disk2/OVA/Client_Win.ova",
+            "power": "on",
+            "resource_pool_name": "/",
+            "virthwver": "21",
+            "virtual_disks": []
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "module.RZO.module.GRPs.module.portgroup_DSI_clients.esxi_portgroup.DSI_clients",
+            "module.RZO.module.GRPs.module.portgroup_DSI_serveurs.esxi_portgroup.DSI_serveurs",
+            "module.RZO.module.GRPs.module.portgroup_dmz.esxi_portgroup.grp_DMZ_fw",
+            "module.RZO.module.GRPs.module.portgroup_fws.esxi_portgroup.FWs",
+            "module.RZO.module.GRPs.module.portgroup_prod_clients.esxi_portgroup.prod_clients",
+            "module.RZO.module.GRPs.module.portgroup_prod_serveurs.esxi_portgroup.prod_serveurs",
+            "module.RZO.module.Vswitchs.module.vSwitch100.esxi_vswitch.vswitch_fr_fr",
+            "module.RZO.module.Vswitchs.module.vSwitch130.esxi_vswitch.vswitch_DSI_serveurs",
+            "module.RZO.module.Vswitchs.module.vSwitch131.esxi_vswitch.vswitch_DSI_clients",
+            "module.RZO.module.Vswitchs.module.vSwitch30.esxi_vswitch.vswitch_prod_serveurs",
+            "module.RZO.module.Vswitchs.module.vSwitch31.esxi_vswitch.vswitch_prod_clients",
+            "module.RZO.module.Vswitchs.module.vSwitch80.esxi_vswitch.vswitch_DMZ_fw",
+            "module.Vms.module.clientlinux1.esxi_guest.client_1_linux",
+            "module.Vms.module.clientlinux2.esxi_guest.client_2_linux",
+            "module.Vms.module.clientlinux3.esxi_guest.client_3_linux",
+            "module.Vms.module.clientwin1.esxi_guest.Client_Win1",
+            "module.Vms.module.clientwin2.esxi_guest.Client_Win2",
+            "module.Vms.module.dmz.esxi_guest.DMZ_WEB_SFTP",
+            "module.Vms.module.opnsense.esxi_guest.OpnSense",
+            "module.Vms.module.pfsense.esxi_guest.PFSense",
+            "module.Vms.module.prodlinux.esxi_guest.serv_prod_linux",
+            "module.Vms.module.prodwin.esxi_guest.serv_prod_win"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.Vms.module.dmz",
+      "mode": "managed",
+      "type": "esxi_guest",
+      "name": "DMZ_WEB_SFTP",
+      "provider": "provider[\"registry.terraform.io/josenk/esxi\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "boot_disk_size": null,
+            "boot_disk_type": "thin",
+            "boot_firmware": "bios",
+            "clone_from_vm": null,
+            "disk_store": "ESX-DSS-GESTION-local-storage2",
+            "guest_name": "DMZ_WEB_SFTP",
+            "guest_shutdown_timeout": 20,
+            "guest_startup_timeout": 120,
+            "guestinfo": null,
+            "guestos": "debian12-64",
+            "host_ovf": null,
+            "id": "287",
+            "ip_address": "10.0.0.140",
+            "memsize": "2048",
+            "network_interfaces": [
+              {
+                "mac_address": "",
+                "nic_type": "e1000",
+                "virtual_network": "GRP-RTR-FW"
+              },
+              {
+                "mac_address": "",
+                "nic_type": "e1000",
+                "virtual_network": "GRP-DMZ-FW"
+              }
+            ],
+            "notes": "",
+            "numvcpus": "2",
+            "ovf_properties": [],
+            "ovf_properties_timer": 90,
+            "ovf_source": "/media/disk2/OVA/Debian.ova",
+            "power": "on",
+            "resource_pool_name": "/",
+            "virthwver": "21",
+            "virtual_disks": []
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "module.RZO.module.GRPs.module.portgroup_DSI_clients.esxi_portgroup.DSI_clients",
+            "module.RZO.module.GRPs.module.portgroup_DSI_serveurs.esxi_portgroup.DSI_serveurs",
+            "module.RZO.module.GRPs.module.portgroup_dmz.esxi_portgroup.grp_DMZ_fw",
+            "module.RZO.module.GRPs.module.portgroup_fws.esxi_portgroup.FWs",
+            "module.RZO.module.GRPs.module.portgroup_prod_clients.esxi_portgroup.prod_clients",
+            "module.RZO.module.GRPs.module.portgroup_prod_serveurs.esxi_portgroup.prod_serveurs",
+            "module.RZO.module.Vswitchs.module.vSwitch100.esxi_vswitch.vswitch_fr_fr",
+            "module.RZO.module.Vswitchs.module.vSwitch130.esxi_vswitch.vswitch_DSI_serveurs",
+            "module.RZO.module.Vswitchs.module.vSwitch131.esxi_vswitch.vswitch_DSI_clients",
+            "module.RZO.module.Vswitchs.module.vSwitch30.esxi_vswitch.vswitch_prod_serveurs",
+            "module.RZO.module.Vswitchs.module.vSwitch31.esxi_vswitch.vswitch_prod_clients",
+            "module.RZO.module.Vswitchs.module.vSwitch80.esxi_vswitch.vswitch_DMZ_fw",
+            "module.Vms.module.opnsense.esxi_guest.OpnSense",
+            "module.Vms.module.pfsense.esxi_guest.PFSense"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.Vms.module.dsiserverlinux",
+      "mode": "managed",
+      "type": "esxi_guest",
+      "name": "DSI_serveur_Ubuntu",
+      "provider": "provider[\"registry.terraform.io/josenk/esxi\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "boot_disk_size": null,
+            "boot_disk_type": "thin",
+            "boot_firmware": "efi",
+            "clone_from_vm": null,
+            "disk_store": "ESX-DSS-GESTION-local-storage2",
+            "guest_name": "DSI_serveur_ubuntu",
+            "guest_shutdown_timeout": 20,
+            "guest_startup_timeout": 120,
+            "guestinfo": null,
+            "guestos": "almalinux-64",
+            "host_ovf": null,
+            "id": "220",
+            "ip_address": "10.0.0.134",
+            "memsize": "4096",
+            "network_interfaces": [
+              {
+                "mac_address": "",
+                "nic_type": "e1000",
+                "virtual_network": "GRP-RTR-FW"
+              },
+              {
+                "mac_address": "",
+                "nic_type": "e1000",
+                "virtual_network": "DSI_serveurs"
+              }
+            ],
+            "notes": "",
+            "numvcpus": "1",
+            "ovf_properties": [],
+            "ovf_properties_timer": 90,
+            "ovf_source": "/media/disk2/OVA/AlmaLinux9.5.ova",
+            "power": "on",
+            "resource_pool_name": "/",
+            "virthwver": "21",
+            "virtual_disks": []
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "module.RZO.module.GRPs.module.portgroup_DSI_clients.esxi_portgroup.DSI_clients",
+            "module.RZO.module.GRPs.module.portgroup_DSI_serveurs.esxi_portgroup.DSI_serveurs",
+            "module.RZO.module.GRPs.module.portgroup_dmz.esxi_portgroup.grp_DMZ_fw",
+            "module.RZO.module.GRPs.module.portgroup_fws.esxi_portgroup.FWs",
+            "module.RZO.module.GRPs.module.portgroup_prod_clients.esxi_portgroup.prod_clients",
+            "module.RZO.module.GRPs.module.portgroup_prod_serveurs.esxi_portgroup.prod_serveurs",
+            "module.RZO.module.Vswitchs.module.vSwitch100.esxi_vswitch.vswitch_fr_fr",
+            "module.RZO.module.Vswitchs.module.vSwitch130.esxi_vswitch.vswitch_DSI_serveurs",
+            "module.RZO.module.Vswitchs.module.vSwitch131.esxi_vswitch.vswitch_DSI_clients",
+            "module.RZO.module.Vswitchs.module.vSwitch30.esxi_vswitch.vswitch_prod_serveurs",
+            "module.RZO.module.Vswitchs.module.vSwitch31.esxi_vswitch.vswitch_prod_clients",
+            "module.RZO.module.Vswitchs.module.vSwitch80.esxi_vswitch.vswitch_DMZ_fw"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.Vms.module.dsiserveurwin",
+      "mode": "managed",
+      "type": "esxi_guest",
+      "name": "DSI_serveur_win",
+      "provider": "provider[\"registry.terraform.io/josenk/esxi\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "boot_disk_size": null,
+            "boot_disk_type": "thin",
+            "boot_firmware": "efi",
+            "clone_from_vm": null,
+            "disk_store": "ESX-DSS-GESTION-local-storage2",
+            "guest_name": "DSI_serveur_win",
+            "guest_shutdown_timeout": 20,
+            "guest_startup_timeout": 120,
+            "guestinfo": null,
+            "guestos": "windows9srv-64",
+            "host_ovf": null,
+            "id": "218",
+            "ip_address": "",
+            "memsize": "8192",
+            "network_interfaces": [
+              {
+                "mac_address": "",
+                "nic_type": "e1000",
+                "virtual_network": "GRP-RTR-FW"
+              },
+              {
+                "mac_address": "",
+                "nic_type": "e1000",
+                "virtual_network": "DSI_serveurs"
+              }
+            ],
+            "notes": "",
+            "numvcpus": "2",
+            "ovf_properties": [],
+            "ovf_properties_timer": 90,
+            "ovf_source": "/media/disk2/OVA/WEC.ova",
+            "power": "on",
+            "resource_pool_name": "/",
+            "virthwver": "21",
+            "virtual_disks": []
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "module.RZO.module.GRPs.module.portgroup_DSI_clients.esxi_portgroup.DSI_clients",
+            "module.RZO.module.GRPs.module.portgroup_DSI_serveurs.esxi_portgroup.DSI_serveurs",
+            "module.RZO.module.GRPs.module.portgroup_dmz.esxi_portgroup.grp_DMZ_fw",
+            "module.RZO.module.GRPs.module.portgroup_fws.esxi_portgroup.FWs",
+            "module.RZO.module.GRPs.module.portgroup_prod_clients.esxi_portgroup.prod_clients",
+            "module.RZO.module.GRPs.module.portgroup_prod_serveurs.esxi_portgroup.prod_serveurs",
+            "module.RZO.module.Vswitchs.module.vSwitch100.esxi_vswitch.vswitch_fr_fr",
+            "module.RZO.module.Vswitchs.module.vSwitch130.esxi_vswitch.vswitch_DSI_serveurs",
+            "module.RZO.module.Vswitchs.module.vSwitch131.esxi_vswitch.vswitch_DSI_clients",
+            "module.RZO.module.Vswitchs.module.vSwitch30.esxi_vswitch.vswitch_prod_serveurs",
+            "module.RZO.module.Vswitchs.module.vSwitch31.esxi_vswitch.vswitch_prod_clients",
+            "module.RZO.module.Vswitchs.module.vSwitch80.esxi_vswitch.vswitch_DMZ_fw"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.Vms.module.opnsense",
+      "mode": "managed",
+      "type": "esxi_guest",
+      "name": "OpnSense",
+      "provider": "provider[\"registry.terraform.io/josenk/esxi\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "boot_disk_size": null,
+            "boot_disk_type": "thin",
+            "boot_firmware": "bios",
+            "clone_from_vm": null,
+            "disk_store": "ESX-DSS-GESTION-local-storage2",
+            "guest_name": "OpnSense",
+            "guest_shutdown_timeout": 20,
+            "guest_startup_timeout": 120,
+            "guestinfo": null,
+            "guestos": "other-64",
+            "host_ovf": null,
+            "id": "217",
+            "ip_address": "",
+            "memsize": "2048",
+            "network_interfaces": [
+              {
+                "mac_address": "",
+                "nic_type": "e1000",
+                "virtual_network": "GRP-RTR-FW"
+              },
+              {
+                "mac_address": "",
+                "nic_type": "e1000",
+                "virtual_network": "GRP-DMZ-FW"
+              },
+              {
+                "mac_address": "",
+                "nic_type": "e1000",
+                "virtual_network": "GRP-FW-FW"
+              }
+            ],
+            "notes": "",
+            "numvcpus": "1",
+            "ovf_properties": [],
+            "ovf_properties_timer": 90,
+            "ovf_source": "/media/disk2/OVA/OpnSense.ova",
+            "power": "on",
+            "resource_pool_name": "/",
+            "virthwver": "21",
+            "virtual_disks": []
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "dependencies": [
+            "module.RZO.module.GRPs.module.portgroup_DSI_clients.esxi_portgroup.DSI_clients",
+            "module.RZO.module.GRPs.module.portgroup_DSI_serveurs.esxi_portgroup.DSI_serveurs",
+            "module.RZO.module.GRPs.module.portgroup_dmz.esxi_portgroup.grp_DMZ_fw",
+            "module.RZO.module.GRPs.module.portgroup_fws.esxi_portgroup.FWs",
+            "module.RZO.module.GRPs.module.portgroup_prod_clients.esxi_portgroup.prod_clients",
+            "module.RZO.module.GRPs.module.portgroup_prod_serveurs.esxi_portgroup.prod_serveurs",
+            "module.RZO.module.Vswitchs.module.vSwitch100.esxi_vswitch.vswitch_fr_fr",
+            "module.RZO.module.Vswitchs.module.vSwitch130.esxi_vswitch.vswitch_DSI_serveurs",
+            "module.RZO.module.Vswitchs.module.vSwitch131.esxi_vswitch.vswitch_DSI_clients",
+            "module.RZO.module.Vswitchs.module.vSwitch30.esxi_vswitch.vswitch_prod_serveurs",
+            "module.RZO.module.Vswitchs.module.vSwitch31.esxi_vswitch.vswitch_prod_clients",
+            "module.RZO.module.Vswitchs.module.vSwitch80.esxi_vswitch.vswitch_DMZ_fw"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.Vms.module.pfsense",
+      "mode": "managed",
+      "type": "esxi_guest",
+      "name": "PFSense",
+      "provider": "provider[\"registry.terraform.io/josenk/esxi\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "boot_disk_size": null,
+            "boot_disk_type": "thin",
+            "boot_firmware": "bios",
+            "clone_from_vm": null,
+            "disk_store": "ESX-DSS-GESTION-local-storage2",
+            "guest_name": "PfSense",
+            "guest_shutdown_timeout": 20,
+            "guest_startup_timeout": 120,
+            "guestinfo": null,
+            "guestos": "other-64",
+            "host_ovf": null,
+            "id": "213",
+            "ip_address": "",
+            "memsize": "2048",
+            "network_interfaces": [
+              {
+                "mac_address": "",
+                "nic_type": "e1000",
+                "virtual_network": "GRP-FW-FW"
+              },
+              {
+                "mac_address": "",
+                "nic_type": "e1000",
+                "virtual_network": "prod_serveurs"
+              },
+              {
+                "mac_address": "",
+                "nic_type": "e1000",
+                "virtual_network": "prod_clients"
+              },
+              {
+                "mac_address": "",
+                "nic_type": "e1000",
+                "virtual_network": "DSI_serveurs"
+              },
+              {
+                "mac_address": "",
+                "nic_type": "e1000",
+                "virtual_network": "DSI_clients"
+              }
+            ],
+            "notes": "",
+            "numvcpus": "1",
+            "ovf_properties": [],
+            "ovf_properties_timer": 90,
+            "ovf_source": "/media/disk2/OVA/PfSense.ova",
+            "power": "on",
+            "resource_pool_name": "/",
+            "virthwver": "21",
+            "virtual_disks": []
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "module.RZO.module.GRPs.module.portgroup_DSI_clients.esxi_portgroup.DSI_clients",
+            "module.RZO.module.GRPs.module.portgroup_DSI_serveurs.esxi_portgroup.DSI_serveurs",
+            "module.RZO.module.GRPs.module.portgroup_dmz.esxi_portgroup.grp_DMZ_fw",
+            "module.RZO.module.GRPs.module.portgroup_fws.esxi_portgroup.FWs",
+            "module.RZO.module.GRPs.module.portgroup_prod_clients.esxi_portgroup.prod_clients",
+            "module.RZO.module.GRPs.module.portgroup_prod_serveurs.esxi_portgroup.prod_serveurs",
+            "module.RZO.module.Vswitchs.module.vSwitch100.esxi_vswitch.vswitch_fr_fr",
+            "module.RZO.module.Vswitchs.module.vSwitch130.esxi_vswitch.vswitch_DSI_serveurs",
+            "module.RZO.module.Vswitchs.module.vSwitch131.esxi_vswitch.vswitch_DSI_clients",
+            "module.RZO.module.Vswitchs.module.vSwitch30.esxi_vswitch.vswitch_prod_serveurs",
+            "module.RZO.module.Vswitchs.module.vSwitch31.esxi_vswitch.vswitch_prod_clients",
+            "module.RZO.module.Vswitchs.module.vSwitch80.esxi_vswitch.vswitch_DMZ_fw",
+            "module.Vms.module.opnsense.esxi_guest.OpnSense"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.Vms.module.prodlinux",
+      "mode": "managed",
+      "type": "esxi_guest",
+      "name": "serv_prod_linux",
+      "provider": "provider[\"registry.terraform.io/josenk/esxi\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "boot_disk_size": null,
+            "boot_disk_type": "thin",
+            "boot_firmware": "efi",
+            "clone_from_vm": null,
+            "disk_store": "ESX-DSS-GESTION-local-storage2",
+            "guest_name": "serv_prod_linux",
+            "guest_shutdown_timeout": 20,
+            "guest_startup_timeout": 120,
+            "guestinfo": null,
+            "guestos": "almalinux-64",
+            "host_ovf": null,
+            "id": "229",
+            "ip_address": "10.0.0.148",
+            "memsize": "2048",
+            "network_interfaces": [
+              {
+                "mac_address": "",
+                "nic_type": "e1000",
+                "virtual_network": "GRP-RTR-FW"
+              },
+              {
+                "mac_address": "",
+                "nic_type": "e1000",
+                "virtual_network": "prod_serveurs"
+              }
+            ],
+            "notes": "",
+            "numvcpus": "1",
+            "ovf_properties": [],
+            "ovf_properties_timer": 90,
+            "ovf_source": "/media/disk2/OVA/AlmaLinux9.5.ova",
+            "power": "on",
+            "resource_pool_name": "/",
+            "virthwver": "21",
+            "virtual_disks": []
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "module.RZO.module.GRPs.module.portgroup_DSI_clients.esxi_portgroup.DSI_clients",
+            "module.RZO.module.GRPs.module.portgroup_DSI_serveurs.esxi_portgroup.DSI_serveurs",
+            "module.RZO.module.GRPs.module.portgroup_dmz.esxi_portgroup.grp_DMZ_fw",
+            "module.RZO.module.GRPs.module.portgroup_fws.esxi_portgroup.FWs",
+            "module.RZO.module.GRPs.module.portgroup_prod_clients.esxi_portgroup.prod_clients",
+            "module.RZO.module.GRPs.module.portgroup_prod_serveurs.esxi_portgroup.prod_serveurs",
+            "module.RZO.module.Vswitchs.module.vSwitch100.esxi_vswitch.vswitch_fr_fr",
+            "module.RZO.module.Vswitchs.module.vSwitch130.esxi_vswitch.vswitch_DSI_serveurs",
+            "module.RZO.module.Vswitchs.module.vSwitch131.esxi_vswitch.vswitch_DSI_clients",
+            "module.RZO.module.Vswitchs.module.vSwitch30.esxi_vswitch.vswitch_prod_serveurs",
+            "module.RZO.module.Vswitchs.module.vSwitch31.esxi_vswitch.vswitch_prod_clients",
+            "module.RZO.module.Vswitchs.module.vSwitch80.esxi_vswitch.vswitch_DMZ_fw",
+            "module.Vms.module.dmz.esxi_guest.DMZ_WEB_SFTP",
+            "module.Vms.module.opnsense.esxi_guest.OpnSense",
+            "module.Vms.module.pfsense.esxi_guest.PFSense"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.Vms.module.prodwin",
+      "mode": "managed",
+      "type": "esxi_guest",
+      "name": "serv_prod_win",
+      "provider": "provider[\"registry.terraform.io/josenk/esxi\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "boot_disk_size": null,
+            "boot_disk_type": "thin",
+            "boot_firmware": "efi",
+            "clone_from_vm": null,
+            "disk_store": "ESX-DSS-GESTION-local-storage2",
+            "guest_name": "serv_prod_win",
+            "guest_shutdown_timeout": 20,
+            "guest_startup_timeout": 120,
+            "guestinfo": null,
+            "guestos": "windows9srv-64",
+            "host_ovf": null,
+            "id": "238",
+            "ip_address": "10.0.0.152",
+            "memsize": "8192",
+            "network_interfaces": [
+              {
+                "mac_address": "",
+                "nic_type": "e1000",
+                "virtual_network": "GRP-RTR-FW"
+              },
+              {
+                "mac_address": "",
+                "nic_type": "e1000",
+                "virtual_network": "prod_serveurs"
+              }
+            ],
+            "notes": "",
+            "numvcpus": "2",
+            "ovf_properties": [],
+            "ovf_properties_timer": 90,
+            "ovf_source": "/media/disk2/OVA/serv_prod_win.ova",
+            "power": "on",
+            "resource_pool_name": "/",
+            "virthwver": "21",
+            "virtual_disks": []
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "module.RZO.module.GRPs.module.portgroup_DSI_clients.esxi_portgroup.DSI_clients",
+            "module.RZO.module.GRPs.module.portgroup_DSI_serveurs.esxi_portgroup.DSI_serveurs",
+            "module.RZO.module.GRPs.module.portgroup_dmz.esxi_portgroup.grp_DMZ_fw",
+            "module.RZO.module.GRPs.module.portgroup_fws.esxi_portgroup.FWs",
+            "module.RZO.module.GRPs.module.portgroup_prod_clients.esxi_portgroup.prod_clients",
+            "module.RZO.module.GRPs.module.portgroup_prod_serveurs.esxi_portgroup.prod_serveurs",
+            "module.RZO.module.Vswitchs.module.vSwitch100.esxi_vswitch.vswitch_fr_fr",
+            "module.RZO.module.Vswitchs.module.vSwitch130.esxi_vswitch.vswitch_DSI_serveurs",
+            "module.RZO.module.Vswitchs.module.vSwitch131.esxi_vswitch.vswitch_DSI_clients",
+            "module.RZO.module.Vswitchs.module.vSwitch30.esxi_vswitch.vswitch_prod_serveurs",
+            "module.RZO.module.Vswitchs.module.vSwitch31.esxi_vswitch.vswitch_prod_clients",
+            "module.RZO.module.Vswitchs.module.vSwitch80.esxi_vswitch.vswitch_DMZ_fw",
+            "module.Vms.module.dmz.esxi_guest.DMZ_WEB_SFTP",
+            "module.Vms.module.opnsense.esxi_guest.OpnSense",
+            "module.Vms.module.pfsense.esxi_guest.PFSense",
+            "module.Vms.module.prodlinux.esxi_guest.serv_prod_linux"
+          ]
+        }
+      ]
+    }
+  ],
+  "check_results": null
+}

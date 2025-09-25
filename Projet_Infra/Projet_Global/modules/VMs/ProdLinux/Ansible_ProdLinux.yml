@@ -1,0 +1,373 @@
+---
+- hosts: all
+  gather_facts: no
+  become: true
+  become_method: sudo
+
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
+    interface_name: ens35
+    new_ip_address: 192.168.30.2
+    netmask: 255.255.255.0
+    gateway: 192.168.30.254
+    dns: 192.168.30.1
+
+
+
+#=====================================================================================================
+#
+#     Containers
+#
+#=====================================================================================================
+
+
+
+  tasks:
+  - name: Install Podman on Alma
+    ansible.builtin.dnf:
+      name: podman
+      state: present
+
+
+  - name: Create storage for podman containers
+    command: podman volume create {{ item }}
+    loop:
+      - mariadb_data
+      - glpi_config
+      - glpi_files
+      - gitlab_config
+      - gitlab_data
+      - gitlab_logs
+      - traefik_conf_static
+      - traefik_conf_dynamic
+    register: volume_create_result
+    changed_when: "'already exists' not in volume_create_result.stdout"
+    failed_when: false
+
+
+  - name: Create network for podman containers
+    command: podman network create glpi-net
+    register: network_create
+    failed_when: false
+    changed_when: "'glpi-net' in network_create.stdout"
+
+
+
+  - name: Create network for traefik
+    command: podman network create traefik-net
+    register: traefik_network
+    changed_when: "'already exists' not in traefik_network.stdout"
+    failed_when: false
+
+
+  - name: Remove MariaDB
+    command: podman rm -f mariadb-glpi
+    failed_when: false
+    changed_when: false
+
+
+  - name: Create MariaDB
+    command: > 
+      podman run -d --name mariadb-glpi
+      --network glpi-net
+      -e MARIADB_ROOT_PASSWORD=root
+      -e MARIADB_DATABASE=glpi
+      -e MARIADB_USER=glpi
+      -e MARIADB_PASSWORD=glpi
+      -v mariadb_data:/var/lib/mysql
+      docker.io/library/mariadb:10.5
+    register: mariadb_run
+
+
+  - name: Remove GLPI
+    command: podman rm -f glpi
+    failed_when: false
+    changed_when: false
+
+
+  - name: Wait for MariaDB
+    shell: |
+      podman exec mariadb-glpi \
+      mysqladmin ping -h 127.0.0.1 -u glpi -pglpi
+    register: mariadb_ready
+    retries: 10
+    delay: 5
+    until: mariadb_ready.stdout is search("mysqld is alive")
+
+
+  - name: Create GLPI
+    command: >
+      podman run -d --name glpi
+      --network glpi-net
+      --network traefik-net
+      -e GLPI_LANG=pt_BR
+      -e MARIADB_HOST=mariadb-glpi
+      -e MARIADB_PORT=3306
+      -e MARIADB_DATABASE=glpi
+      -e MARIADB_USER=glpi
+      -e MARIADB_PASSWORD=glpi
+      -e VERSION="9.5.6"
+      -e PLUGINS="all"
+      -v glpi_config:/var/www/html/config
+      -v glpi_files:/var/www/html/files
+      docker.io/fametec/glpi:latest
+
+
+  - name: Remove GitLab
+    command: podman rm -f gitlab
+    failed_when: false
+    changed_when: false
+
+
+  - name: Create GitLab
+    command: >
+      podman run -d --name gitlab
+      --network traefik-net
+      -v gitlab_config:/etc/gitlab
+      -v gitlab_data:/var/opt/gitlab
+      -v gitlab_logs:/var/log/gitlab
+      --label "traefik.enable=true"
+      --label "traefik.http.routers.glpi.rule=Host(`ServeurLinux.gitlab`)"
+      --label "traefik.http.routers.glpi.entrypoints=websecure"
+      --label "traefik.http.routers.glpi.tls.certresolver=letsencrypt"
+      docker.io/gitlab/gitlab-ce:latest
+
+
+  - name: Deploy traefik static config
+    copy:
+      dest: /opt/traefik/traefik.yml
+      content: |
+        entryPoints:
+          web:
+            address: ":80"
+          websecure:
+            address: ":443"
+
+        providers:
+          file:
+            filename: /etc/traefik/traefik_dynamic.yml
+
+        log:
+          level: DEBUG
+
+        api:
+          dashboard: true
+          insecure: true   # ⚠️ désactive en prod !
+
+  - name: Deploy traefik dynamic config
+    copy:
+      dest: /opt/traefik/traefik_dynamic.yml
+      content: |
+        http:
+          routers:
+            glpi:
+              rule: "Host(`glpi.GDI.local`)"   # 👉 change par ton domaine
+              service: glpi-service
+              entryPoints:
+                - web
+                - websecure
+
+            gitlab:
+              rule: "Host(`gitlab.GDI.local`)" # 👉 change par ton domaine
+              service: gitlab-service
+              entryPoints:
+                - web
+                - websecure
+
+          services:
+            glpi-service:
+              loadBalancer:
+                servers:
+                  - url: "http://glpi:80"        # 👉 nom du conteneur GLPI + port interne
+
+            gitlab-service:
+              loadBalancer:
+                servers:
+                  - url: "http://gitlab:80"      # 👉 nom du conteneur GitLab + port interne
+
+
+
+  - name: Create acme.json file for Let's Encrypt
+    copy:
+      dest: /var/lib/containers/storage/volumes/traefik_certs/_data/acme.json
+      content: ''
+      mode: '0600'
+
+
+  - name: delete Traefik
+    command: podman rm -f traefik
+    failed_when: false
+    changed_when: false
+
+
+  - name: Run Traefik container
+    command: >
+      podman run -d --name traefik
+      --network traefik-net
+      -p 80:80 -p 443:443
+      -v /opt/traefik:/etc/traefik
+      docker.io/traefik:latest
+
+
+
+
+  - name: Create GLPI tables in MariaDB
+    command: podman exec glpi php bin/console db:install --no-interaction
+    ignore_errors: yes
+
+  - name: Wait for GitLab
+    ansible.builtin.shell: sleep 15
+    args:
+      executable: /bin/bash
+
+  - name: Reset root password inside GitLab container (podman)
+    ignore_errors: yes
+    ansible.builtin.shell: |
+      podman exec -i gitlab \
+      gitlab-rails runner "user = User.where(id: 1).first; user.password = 'Azerty123!'; user.password_confirmation = 'Azerty123!'; user.save!"
+    args:
+      executable: /bin/bash
+
+
+
+#=====================================================================================================
+#
+#     Services Systemd
+#
+#=====================================================================================================
+
+
+
+  - name: Créer service systemd pour mariadb-glpi
+    copy:
+      dest: /etc/systemd/system/podman-mariadb-glpi.service
+      content: |
+        [Unit]
+        Description=MariaDB container for GLPI
+        Wants=network-online.target
+        After=network-online.target
+
+        [Service]
+        Restart=always
+        ExecStart=/usr/bin/podman start -a mariadb-glpi
+        ExecStop=/usr/bin/podman stop -t 10 mariadb-glpi
+
+        [Install]
+        WantedBy=multi-user.target
+
+
+  - name: Créer service systemd pour glpi
+    copy:
+      dest: /etc/systemd/system/podman-glpi.service
+      content: |
+        [Unit]
+        Description=GLPI container
+        Wants=podman-mariadb-glpi.service
+        After=podman-mariadb-glpi.service
+
+        [Service]
+        Restart=always
+        ExecStart=/usr/bin/podman start -a glpi
+        ExecStop=/usr/bin/podman stop -t 10 glpi
+
+        [Install]
+        WantedBy=multi-user.target
+
+
+  - name: Créer service systemd pour gitlab
+    copy:
+      dest: /etc/systemd/system/podman-gitlab.service
+      content: |
+        [Unit]
+        Description=GitLab container
+        Wants=network-online.target
+        After=network-online.target
+ 
+        [Service]
+        Restart=always
+        ExecStart=/usr/bin/podman start -a gitlab
+        ExecStop=/usr/bin/podman stop -t 10 gitlab
+        [Install]
+        WantedBy=multi-user.target
+
+
+  - name: Créer service systemd pour traefik
+    copy:
+      dest: /etc/systemd/system/podman-traefik.service
+      content: |
+        [Unit]
+        Description=traefik container
+        Wants=network-online.target
+        After=network-online.target
+ 
+        [Service]
+        Restart=always
+        ExecStart=/usr/bin/podman start -a traefik
+        ExecStop=/usr/bin/podman stop -t 10 traefik
+        [Install]
+        WantedBy=multi-user.target
+
+
+  - name: Recharger systemd
+    command: systemctl daemon-reexec
+
+  - name: Activer le service mariadb-glpi au démarrage
+    systemd:
+      name: podman-mariadb-glpi
+      enabled: yes
+
+  - name: Activer le service glpi au démarrage
+    systemd:
+      name: podman-glpi
+      enabled: yes
+
+  - name: Activer le service gitlab au démarrage
+    systemd:
+      name: podman-gitlab
+      enabled: yes
+
+
+  - name: Activer le service traefik au démarrage
+    systemd:
+      name: podman-traefik
+      enabled: yes
+
+        
+        
+#=====================================================================================================
+#
+#     RZO
+#
+#=====================================================================================================
+
+
+
+
+
+  - name: Hostname
+    ansible.builtin.hostname:
+      name: ServProdLinux
+
+
+  - name: Create admin user
+    ansible.builtin.user:
+      name: admin
+      shell: /bin/bash
+      groups: wheel
+      state: present
+
+
+  - name: Set password for admin user
+    ansible.builtin.user:
+      name: admin
+      password: "{{ 'Azerty123!' | password_hash('sha512') }}"
+
+
+  - name: desactiver ens34 onboot
+    command: nmcli connection modify ens34 connection.autoconnect no
+
+
+  - name: Desactivation réseau
+    command: nmcli connection down ens34
+    async: 45
+    poll: 0

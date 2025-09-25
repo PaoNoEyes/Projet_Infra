@@ -1,0 +1,206 @@
+- name: Préparation Windows et installation des logiciels via WinRM
+  hosts: all
+  gather_facts: yes 
+  vars:
+    seven_zip_msi_url: "https://www.7-zip.org/a/7z2409-x64.msi"
+    seven_zip_local_path: "C:\\Temp\\7z2409-x64.msi"
+    winget_command: 'winget install --id Mozilla.Thunderbird -e --accept-package-agreements --accept-source-agreements'
+    domain_name: "GDI.local"
+    domain_user: "Administrateur@GDI.local"
+    domain_password: "Azerty01."
+
+  tasks:
+
+    # ---------------------------
+    # 1️⃣Vérifier et activer WinRM
+    # ---------------------------
+    - name: Vérifier si WinRM est actif
+      win_command: powershell -Command "$service = Get-Service WinRM -ErrorAction SilentlyContinue; if ($service -and $service.Status -eq 'Running') { 'running' } else { 'stopped' }"
+      register: winrm_status 
+       
+
+    - name: Check RDP
+      win_command: powershell -Command "Set-ItemProperty -Path 'HKLM:System\CurrentControlSet\Control\Terminal Server\' -name 'fDenyTSConnections' -Value 0"
+        
+
+    - name: Enable RDP on FireWall
+      win_command: powershell -Command "Enable-NetFIrewallRule -DisplayGroup 'Bureau à distance'" 
+
+    - name: Installer et configurer WinRM si nécessaire
+      win_shell: |
+        Set-Item -Path WSMan:\localhost\Service\Auth\Basic -value $true
+        Set-Item -Path WSMan:\localhost\Service\AllowUnencrypted -value $true
+      args:
+        executable: powershell.exe
+      when: winrm_status.stdout != "running"
+
+    - name: Tester la connexion WinRM
+      win_ping:
+
+    - name: Vérifier si le dossier C:\Temp existe
+      win_stat:
+        path: C:\Temp
+      register: temp_dir
+
+    - name: Créer le dossier C:\Temp si absent
+      win_file:
+        path: C:\Temp
+        state: directory
+      when: not temp_dir.stat.exists
+
+
+    # ---------------------------
+    # Vérifier et installer Winget
+    # ---------------------------
+    - name: Vérifier si Winget est installé
+      win_shell: powershell -Command "if (Get-Command winget -ErrorAction SilentlyContinue) { 'exists' } else { 'not_exists' }"
+      register: winget_check
+
+    - name: Installer Winget si absent
+      win_shell: powershell -Command "winget install --id=Microsoft.Winget.Client --accept-source-agreements --accept-package-agreements"
+      when: winget_check.stdout == "not_exists"
+
+    # ---------------------------
+    # Installer logiciels via Winget et MSI
+    # ---------------------------
+    - name: Installer Thunderbird via Winget
+      win_shell: |
+        winget install --id 'Mozilla.Thunderbird' --accept-source-agreements --accept-package-agreements --silent --exact
+        Write-Output "Résultat Winget : $result"
+      register: thunderbird_result
+      ignore_errors: yes
+      when: winget_check.rc == 0
+
+    - name: Installer LibreOffice via Winget
+      win_shell: |
+        $result = winget install --id TheDocumentFoundation.LibreOffice --accept-source-agreements --accept-package-agreements --silent --exact
+        Write-Output $result
+      register: libreoffice_result
+      ignore_errors: yes
+      when: winget_check.rc == 0
+
+    - name: Vérifier installation LibreOffice
+      win_stat:
+        path: "C:\\Program Files\\LibreOffice\\program\\soffice.exe"
+      register: libreoffice_check
+
+    - name: Télécharger 7-Zip MSI
+      win_get_url:
+        url: "{{ seven_zip_msi_url }}"
+        dest: "{{ seven_zip_local_path }}"
+
+    - name: Installer 7-Zip MSI
+      win_package:
+        path: "{{ seven_zip_local_path }}"
+        state: present
+
+    - name: Installer VLC via Winget
+      win_shell: |
+        winget install --id 'VideoLAN.VLC' --accept-source-agreements --accept-package-agreements --silent --exact
+        Write-Output "Résultat Winget : $result"
+      register: vlc_result
+      ignore_errors: yes
+      when: winget_check.rc == 0
+
+#    - name: Installer GIMP via Winget
+#     win_shell: |
+#       $result = winget install --id GIMP.GIMP.2 --accept-source-agreements --accept-package-agreements --silent --exact
+#       Write-Output $result
+#     register: gimp_result
+#     ignore_errors: yes
+#     when: winget_check.rc == 0
+
+    - name: Installer Shotcut 25.05.11 via Winget
+      win_shell: |
+        winget install --id "Meltytech.Shotcut" --version 25.05.11 --accept-source-agreements --accept-package-agreements --silent --exact
+      register: shotcut_result
+      ignore_errors: yes
+      when: winget_check.rc == 0
+
+    - name: Installer KeePass 2.59 via Winget
+      win_shell: |
+        $result = winget install --id DominikReichl.KeePass --accept-source-agreements --accept-package-agreements --silent --exact
+        Write-Output $result
+      register: keepass_result
+      ignore_errors: yes
+      when: winget_check.rc == 0
+
+
+    # ---------------------------
+    # Mettre dans le domaine Windows
+    # ---------------------------
+    - name: Forcer le profil réseau en "Private" pour une interface spécifique
+      win_shell: |
+        $InterfaceName = "Ethernet1 2"
+        $profile = Get-NetConnectionProfile -InterfaceAlias $InterfaceName
+        if ($profile.NetworkCategory -ne "Private") {
+          Set-NetConnectionProfile -InterfaceAlias $InterfaceName -NetworkCategory Private
+        }
+      register: result_network_profile
+
+    - name: Afficher le résultat du changement de profil réseau
+      debug:
+        var: result_network_profile.stdout
+
+    - name: Activer et forcer renouvellement DHCP sur Ethernet1 2
+      win_shell: |
+        Enable-NetAdapter -Name 'Ethernet1 2' -Confirm:$false
+        Start-Sleep -Seconds 3
+        Set-NetIPInterface -InterfaceAlias 'Ethernet1 2' -Dhcp Enabled
+        Start-Sleep -Seconds 3
+        ipconfig /release "Ethernet1 2"
+        Start-Sleep -Seconds 2
+        ipconfig /renew "Ethernet1 2"
+        Start-Sleep -Seconds 5
+        $ip = Get-NetIPAddress -InterfaceAlias 'Ethernet1 2' -AddressFamily IPv4 | Where-Object {$_.IPAddress -notlike "169.254.*"} | Select-Object -ExpandProperty IPAddress
+        Write-Output $ip
+      register: new_ip
+
+    - name: Extraire juste l'IP avec regex
+      set_fact:
+        clean_ip: "{{ new_ip.stdout | regex_findall('192\\.168\\.\\d+\\.\\d+') | first }}"
+
+    - name: Corriger route et configurer DNS
+      win_shell: |
+        Remove-NetRoute -DestinationPrefix "192.168.30.0/24" -Confirm:$false -ErrorAction SilentlyContinue
+        New-NetRoute -InterfaceAlias 'Ethernet1 2' -DestinationPrefix "192.168.30.0/24" -NextHop 192.168.31.254 -ErrorAction SilentlyContinue
+        Set-DnsClientServerAddress -InterfaceAlias 'Ethernet1 2' -ServerAddresses 192.168.30.1
+
+    - name: Test final avant jonction
+      win_shell: |
+        nslookup GDI.local 192.168.30.1
+      register: dns_test
+
+    - name: Afficher résolution DNS
+      debug:
+        var: dns_test.stdout_lines
+
+    - name: Joindre au domaine
+      win_domain_membership:
+        dns_domain_name: "{{ domain_name }}"
+        domain_admin_user: "{{ domain_user }}"
+        domain_admin_password: "{{ domain_password }}"
+        state: domain
+      register: domain_result
+
+    - name: Afficher résultat
+      debug:
+        var: domain_result
+
+    - name: Redémarrer si nécessaire
+      win_reboot:
+        reboot_timeout: 300
+      when: domain_result.reboot_required | default(false)
+
+    - name: Désactiver carte réseau Ethernet0
+      win_shell: |
+        Disable-NetAdapter -Name "Ethernet0 2" -Confirm:$false
+      async: 45
+      poll: 0
+      register: disable_nic_result
+      ignore_errors: yes
+  
+       
+
+
+    

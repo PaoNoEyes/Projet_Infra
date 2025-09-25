@@ -1,0 +1,269 @@
+- hosts: all
+  gather_facts: no
+  become: true
+  become_method: sudo
+
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
+    interface_name: eth1
+    new_ip_address: 192.168.20.25
+    netmask: 255.255.255.0
+    gateway: 192.168.20.254
+    dns: 192.168.20.254
+    db_name: wordpress
+    db_user: wp_user
+    db_password: "SuperMotDePasse"
+    wp_url: "http://192.168.20.25"
+    wp_user: "admin"
+    wp_password: "nimda"
+    wp_version: "6.7"
+    wp_dir: "/var/www/html"
+    wp_plugins:
+      - name: "royal-elementor-addons"
+        version: "1.3.78"
+        url: "https://downloads.wordpress.org/plugin/royal-elementor-addons.1.3.78.zip"
+      - name: "give"
+        version: "3.13.0"
+        url: "https://downloads.wordpress.org/plugin/give.3.13.0.zip"
+
+  tasks:
+
+    - name: Créer l'utilisateur administrateur
+      ansible.builtin.user:
+        name: administrateur
+        comment: "Utilisateur administrateur"
+        shell: /bin/bash
+        create_home: yes
+
+    - name: Définir le mot de passe de l'utilisateur (hashé)
+      ansible.builtin.user:
+        name: administrateur
+        password: "{{ '@Dmin789!' | password_hash('sha512') }}"
+
+    - name: Ajouter l'utilisateur au groupe sudo
+      ansible.builtin.user:
+        name: administrateur
+        groups: sudo
+        append: yes
+
+    - name: Activation réseau
+      command: ip link set eth1 up
+
+    - name: Vérifier si IP est déjà présente
+      command: ip addr show dev eth1
+      register: ip_check
+
+    - name: Ajouter IP si absente
+      command: ip addr add 192.168.20.25/24 dev eth1
+      when: "'192.168.20.25' not in ip_check.stdout"
+
+    - name: Configurer la passerelle pour eth1
+      command: ip route replace default via {{ gateway }} dev {{ interface_name }}
+
+    - name: Ajouter un serveur DNS
+      lineinfile:
+        path: /etc/resolv.conf
+        line: "nameserver {{ dns }}"
+        create: yes
+
+    - name: Forcer l'IPv4 dans apt
+      command: echo 'Acquire::ForceIPv4 "true";' | sudo tee /etc/apt/apt.conf.d/99force-ipv4
+
+    - name: Installer paquets de base
+      apt:
+        name:
+          - python3-pymysql
+          - apache2
+          - mariadb-server
+          - php
+          - php-mysql
+          - php-xml
+          - php-curl
+          - php-zip
+          - unzip
+          - wget
+        state: present
+        update_cache: yes
+
+    - name: Démarrer et activer Apache et MariaDB
+      service:
+        name: "{{ item }}"
+        state: started
+        enabled: yes
+      loop:
+        - apache2
+        - mariadb
+
+    - name: Installer WP-CLI
+      get_url:
+        url: https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+        dest: /usr/local/bin/wp
+        mode: '0755'
+
+    - name: Créer la base de données
+      community.mysql.mysql_db:
+        name: "{{ db_name }}"
+        state: present
+        login_unix_socket: /var/run/mysqld/mysqld.sock
+
+    - name: Créer l’utilisateur DB
+      community.mysql.mysql_user:
+        name: "{{ db_user }}"
+        password: "{{ db_password }}"
+        priv: "{{ db_name }}.*:ALL"
+        state: present
+        login_unix_socket: /var/run/mysqld/mysqld.sock
+
+    - name: Télécharger Wordpress
+      get_url:
+        url: "https://wordpress.org/wordpress-{{ wp_version }}.tar.gz"
+        dest: /tmp/wordpress.tar.gz
+
+    - name: Extraire Wordpress
+      ansible.builtin.shell: |
+        tar -xzvf /tmp/wordpress.tar.gz --strip-components=1 -C /var/www/html &&
+        rm -rf /var/www/html/index.html
+
+    - name: Copier le fichier wp-config.php
+      template:
+        src: wp-config.php.j2
+        dest: /var/www/html/wp-config.php
+        owner: www-data
+        group: www-data
+        mode: '0644'
+
+    - name: Installer WordPress avec WP-CLI
+      command: >
+        wp core install
+        --url="http://192.168.20.25"
+        --title="Server Web"
+        --admin_user="admin"
+        --admin_password="nimda"
+        --admin_email="test@gmail.com"
+        --allow-root
+      args:
+        chdir: /var/www/html
+      register: wp_install
+      ignore_errors: yes
+
+    - name: Définir les permissions
+      file:
+        path: "{{ wp_dir }}"
+        owner: www-data
+        group: www-data
+        recurse: yes
+
+    - name: Télécharger les plugins WordPress
+      ansible.builtin.get_url:
+        url: "{{ item.url }}"
+        dest: "/tmp/{{ item.name }}-{{ item.version }}.zip"
+      loop: "{{ wp_plugins }}"
+
+    - name: Installer ou activer les plugins WordPress
+      shell: |
+        if wp plugin is-installed {{ item.name }} --allow-root; then
+          wp plugin activate {{ item.name }} --allow-root
+        else
+          wp plugin install {{ item.url }} --activate --allow-root
+        fi
+      args:
+        chdir: "{{ wp_dir }}"
+      loop: "{{ wp_plugins }}"
+
+    - name: Afficher résultats WP-CLI
+      debug:
+        var: wp_cli_results.results
+
+    - name: Configurer Apache pour Wordpress
+      copy:
+        dest: /etc/apache2/sites-available/wordpress.conf
+        content: |
+          <VirtualHost *:80>
+              DocumentRoot {{ wp_dir }}
+              <Directory {{ wp_dir }}>
+                  AllowOverride All
+                  Require all granted
+              </Directory>
+          </VirtualHost>
+
+    - name: Activer site et modules Apache
+      command: "{{ item }}"
+      loop:
+        - a2ensite wordpress
+        - a2enmod rewrite
+        - systemctl reload apache2
+
+    - name: Créer utilisateur admin (SFTP uniquement)
+      user:
+        name: admin
+        password: "{{ 'admin' | password_hash('sha512') }}"
+        shell: /usr/sbin/nologin
+        home: /var/www/html
+        create_home: no
+
+    - name: Créer utilisateur anonymous (SFTP uniquement)
+      user:
+        name: anonymous
+        password: "{{ 'anonymous' | password_hash('sha512') }}"
+        shell: /usr/sbin/nologin
+        home: /home/anonymous
+        create_home: yes
+
+    - name: Corriger permissions pour anonymous
+      file:
+        path: /home/anonymous
+        state: directory
+        owner: root
+        group: root
+        mode: "0755"
+
+    - name: Créer dossier de dépôt pour anonymous
+      file:
+        path: /home/anonymous/upload
+        state: directory
+        owner: anonymous
+        group: anonymous
+        mode: "0755"
+
+    - name: Configurer SFTP dans sshd_config
+      blockinfile:
+        path: /etc/ssh/sshd_config
+        marker: "# {mark} ANSIBLE MANAGED BLOCK"
+        block: |
+          Match User admin
+            ChrootDirectory /var/www/html
+            ForceCommand internal-sftp
+            AllowTcpForwarding no
+            X11Forwarding no
+
+          Match User anonymous
+            ChrootDirectory /home/anonymous
+            ForceCommand internal-sftp
+            AllowTcpForwarding no
+            X11Forwarding no
+
+    - name: Redémarrer SSH
+      service:
+        name: ssh
+        state: restarted
+
+    - name: Créer dossier chroot
+      ansible.builtin.file:
+        path: /var/www/html
+        state: directory
+        owner: root
+        group: root
+        mode: '0755'
+
+    - name: Créer dossier upload
+      ansible.builtin.file:
+        path: /var/www/html/uploads
+        state: directory
+        owner: admin
+        group: admin
+        mode: '0755'
+
+    - name: Desactivation réseau
+      command: ifdown eth0
+      async: 45
+      poll: 0

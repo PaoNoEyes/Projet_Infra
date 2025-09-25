@@ -1,0 +1,30 @@
+- name: Software install
+  hosts: windows
+  tasks:
+
+    - name: Créer un dossier temporaire
+      win_file:
+        path: C:\Temp
+        state: directory
+
+    - name: Télécharger winget depuis GitHub
+      win_get_url:
+        url: https://github.com/microsoft/winget-cli/releases/download/v1.7.10861/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle
+        dest: C:\Temp\winget.msixbundle
+
+
+
+
+
+
+
+    - name: Télécharger l'installeur de 7-Zip
+      win_get_url:
+        url: https://www.7-zip.org/a/7z2201-x64.msi
+        dest: C:\Temp\7z2201-x64.msi
+
+    - name: Installer 7-Zip
+      win_package:
+        path: C:\Temp\7z2201-x64.msi
+        product_name: "7-Zip 22.01 (x64 edition)"
+        state: present
